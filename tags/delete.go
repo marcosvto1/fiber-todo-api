@@ -7,8 +7,8 @@ import (
 	"github.com/marcosvto1/fiber-todo-api/db"
 )
 
-func deleteTag(c *fiber.Ctx) error {
-	err := db.Delete("tags", c.Params("id"))
+func (controller *TagController) deleteTag(c *fiber.Ctx) error {
+	err := db.Delete(controller.Collection, c.Params("id"))
 	if err != nil {
 		c.Status(http.StatusBadRequest).JSON(map[string]interface{}{
 			"message": err.Error(),

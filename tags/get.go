@@ -7,26 +7,28 @@ import (
 	"github.com/marcosvto1/fiber-todo-api/db"
 )
 
-func getAll(c *fiber.Ctx) error {
+func (controller *TagController) getAll(c *fiber.Ctx) error {
 	tags := []TagEntity{}
 
-	err := db.Find("tags", &tags)
+	err := db.Find(controller.Collection, &tags)
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(map[string]interface{}{
 			"message": err.Error(),
+			"code":    http.StatusInternalServerError,
 		})
 	}
 
 	return c.JSON(tags)
 }
 
-func getById(c *fiber.Ctx) error {
+func (controller *TagController) getById(c *fiber.Ctx) error {
 	tag := TagEntity{}
 
-	err := db.FindById("tags", c.Params("id"), tag)
+	err := db.FindById(controller.Collection, c.Params("id"), tag)
 	if err != nil {
-		return c.Status(http.StatusInternalServerError).JSON(map[string]interface{}{
+		return c.Status(http.StatusNotFound).JSON(map[string]interface{}{
 			"message": err.Error(),
+			"code":    http.StatusNotFound,
 		})
 	}
 
