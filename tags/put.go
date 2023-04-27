@@ -7,7 +7,7 @@ import (
 	"github.com/marcosvto1/fiber-todo-api/db"
 )
 
-func updateTag(c *fiber.Ctx) error {
+func (controller *TagController) updateTag(c *fiber.Ctx) error {
 	tagBodyData := new(TagEntity)
 	if err := c.BodyParser(tagBodyData); err != nil {
 		return c.Status(http.StatusBadRequest).JSON(map[string]interface{}{
@@ -16,7 +16,7 @@ func updateTag(c *fiber.Ctx) error {
 	}
 
 	tagResult := TagEntity{}
-	err := db.UpdateOne("tags", c.Params("id"), tagBodyData, &tagResult)
+	err := db.UpdateOne(controller.Collection, c.Params("id"), tagBodyData, &tagResult)
 	if err != nil {
 		c.Status(http.StatusInternalServerError).JSON(map[string]interface{}{
 			"message": err.Error(),
