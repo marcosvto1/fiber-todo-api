@@ -10,7 +10,7 @@ import (
 func getAllTask(c *fiber.Ctx) error {
 	tasks := []TaskEntity{}
 
-	err := db.Find("tasks", &tasks)
+	err := db.Find("tasks", nil, &tasks)
 	if err != nil {
 		return c.Status(http.StatusBadGateway).JSON(map[string]interface{}{
 			"message": err.Error(),

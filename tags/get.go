@@ -10,7 +10,7 @@ import (
 func (controller *TagController) getAll(c *fiber.Ctx) error {
 	tags := []TagEntity{}
 
-	err := db.Find(controller.Collection, &tags)
+	err := db.Find(controller.Collection, nil, &tags)
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(map[string]interface{}{
 			"message": err.Error(),

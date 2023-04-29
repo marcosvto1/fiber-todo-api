@@ -10,7 +10,7 @@ import (
 func getAll(c *fiber.Ctx) error {
 	var users = []UserEntity{}
 
-	err := db.Find("users", &users)
+	err := db.Find("users", nil, &users)
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(map[string]interface{}{
 			"message": err.Error(),
