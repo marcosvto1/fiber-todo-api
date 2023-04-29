@@ -5,6 +5,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/marcosvto1/fiber-todo-api/db"
+	"github.com/marcosvto1/fiber-todo-api/tags"
 )
 
 func addTask(c *fiber.Ctx) error {
@@ -23,6 +24,15 @@ func addTask(c *fiber.Ctx) error {
 	}
 
 	taskBodyData.ID = objectId
+
+	err = tags.AddTask(taskBodyData.ID.Hex(), taskBodyData.Tags)
+	if err != nil {
+		db.Delete("tasks", taskBodyData.ID.Hex())
+		return c.Status(http.StatusInternalServerError).JSON(map[string]interface{}{
+			"message": err.Error(),
+			"code":    http.StatusInternalServerError,
+		})
+	}
 
 	return c.Status(http.StatusCreated).JSON(taskBodyData)
 }
